@@ -7,5 +7,5 @@ import retrofit2.http.Url
 
 interface ApiService {
     @GET("/sbk/sportsbook4/ncaa-football-betting/game-lines.sbk")
-    fun getNcaaLines(): Single<Response<String>>
+    fun getNcaaFootballLines(): Single<Response<String>>
 }

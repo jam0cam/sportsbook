@@ -6,20 +6,20 @@ import javax.inject.Inject
 
 class UrlInteractor @Inject constructor(
     private val service: ApiService,
-    private val schedulers: MySchedulers
+    private val parser: BetParser
 ) {
 
     fun getBets(): Maybe<List<Bet>> {
-        service.getNcaaLines()
-            .map {
-                Log.e("JIA", "response: ${it.body()}")
-            }.withSchedulers(schedulers)
-            .subscribe({
-                Log.e("JIA", "success")
-            }, {
-                Log.e("JIA", "error: ${it.message}, $it")
-            })
-        return Maybe.empty()
+        return service.getNcaaFootballLines()
+            .flatMapMaybe { response ->
+                Log.e("JIA", "got response")
+                var result = response.body()
+                    ?.let { parser.parse(it) }
+                    ?.filter { it.odds.toIntOrNull() != null }
+                    ?.filter { it.odds.toInt() < -1000 }
+
+                result?.let { Maybe.just(it) } ?: Maybe.empty()
+            }
     }
 
 }
