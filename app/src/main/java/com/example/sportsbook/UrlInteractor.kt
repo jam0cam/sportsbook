@@ -18,7 +18,10 @@ class UrlInteractor @Inject constructor(
                     ?.filter { it.odds.toIntOrNull() != null }
                     ?.filter { it.odds.toInt() < -1000 }
 
-                result?.let { Maybe.just(it) } ?: Maybe.empty()
+                result?.let {
+                    if (it.isEmpty()) Maybe.empty()
+                    else Maybe.just(it)
+                } ?: Maybe.empty()
             }
     }
 

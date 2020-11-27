@@ -8,7 +8,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val urlInteractor: UrlInteractor,
     private val schedulers: MySchedulers,
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -20,6 +20,8 @@ class MainViewModel @Inject constructor(
                 Log.e("JIA", "success $it")
             }, {
                 Log.e("JIA", "error: ${it.message}, $it")
+            }, {
+                Log.e("JIA", "completed with out anything")
             }).addTo(compositeDisposable)
     }
 
