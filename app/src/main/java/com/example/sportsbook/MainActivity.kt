@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         (applicationContext as MyApplication).appComponent.inject(this)
 
-        viewModel.init()
+//        viewModel.init()
     }
 
     override fun onResume() {
