@@ -16,4 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.init()
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.init()
+    }
 }

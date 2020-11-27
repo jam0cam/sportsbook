@@ -8,7 +8,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun init() {
-
+        urlInteractor.getBets()
     }
 
 }
