@@ -1,6 +1,8 @@
 package com.example.sportsbook
 
 import android.util.Log
+import com.example.sportsbook.main.BetParser
+import com.example.sportsbook.main.DailyBet
 import io.reactivex.Maybe
 import javax.inject.Inject
 

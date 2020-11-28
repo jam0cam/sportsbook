@@ -1,6 +1,6 @@
 package com.example.sportsbook.dagger
 
-import com.example.sportsbook.MainActivity
+import com.example.sportsbook.main.MainActivity
 import dagger.Component
 import javax.inject.Singleton
 

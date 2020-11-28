@@ -1,4 +1,4 @@
-package com.example.sportsbook
+package com.example.sportsbook.main
 
 data class Bet(
     val name: String,

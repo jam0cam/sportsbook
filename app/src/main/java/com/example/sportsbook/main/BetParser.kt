@@ -1,5 +1,6 @@
-package com.example.sportsbook
+package com.example.sportsbook.main
 
+import com.example.sportsbook.idxOf
 import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
