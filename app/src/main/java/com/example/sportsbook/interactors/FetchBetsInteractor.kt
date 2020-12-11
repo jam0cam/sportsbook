@@ -41,7 +41,10 @@ class FetchBetsInteractor @Inject constructor(
                 } ?: Maybe.empty()
             }
             .map(::transformData)
-            .doOnSuccess(::persistData)
+            .flatMap {
+                persistData(it)
+                Maybe.just(it)
+            }
     }
 
     private fun transformData(bets: List<DailyBet>) : Map<LocalDate, List<DailyBet>> {

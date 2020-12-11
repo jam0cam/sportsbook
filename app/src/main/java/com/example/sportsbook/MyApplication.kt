@@ -8,4 +8,12 @@ class MyApplication : Application() {
 
     val appComponent = DaggerApplicationComponent.create()
 
+    companion object {
+        lateinit var instance: MyApplication
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
 }
