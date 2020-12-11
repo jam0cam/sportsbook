@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportsbook.MyApplication
 import com.example.sportsbook.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.init()
-        binding.swipeRefresh.setOnRefreshListener { viewModel.init() }
 
         with (viewModel) {
             state.observe(this@MainActivity, ::updateState)
@@ -31,11 +31,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateState(state: MainUiState) {
         Log.e("JIA", "updating state : ${state.loading}")
-        binding.swipeRefresh.isRefreshing = state.loading
     }
 
-    private fun bindBets(bets: List<DailyBet>) {
-        Log.e("JIA", "binding bets $bets")
+    private fun bindBets(model: MainUiModel) {
+        Log.e("JIA", "binding bets $model")
+
+        binding.pager.adapter = BetsPagerAdapter(model.dates, supportFragmentManager, lifecycle)
+        TabLayoutMediator(binding.tab, binding.pager) { tab, position ->
+            tab.text = model.dates[position].toString()
+        }.attach()
+
     }
 
 }
