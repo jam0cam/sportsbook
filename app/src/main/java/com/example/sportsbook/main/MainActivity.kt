@@ -2,17 +2,20 @@ package com.example.sportsbook.main
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sportsbook.MyApplication
+import com.example.sportsbook.dagger.ViewModelFactory
 import com.example.sportsbook.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject lateinit var viewModel: MainViewModel
-    private lateinit var binding: ActivityMainBinding
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel: MainViewModel by viewModels { viewModelFactory }
 
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
