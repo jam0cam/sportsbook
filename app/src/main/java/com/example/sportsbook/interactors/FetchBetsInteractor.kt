@@ -1,6 +1,5 @@
 package com.example.sportsbook.interactors
 
-import android.graphics.Bitmap
 import android.util.Log
 import com.example.sportsbook.ApiService
 import com.example.sportsbook.extensions.switchIfNull
@@ -8,10 +7,11 @@ import com.example.sportsbook.main.BetParser
 import com.example.sportsbook.main.Category
 import com.example.sportsbook.main.DailyBet
 import com.example.sportsbook.persistence.BetsCache
-import com.example.sportsbook.toMaybe
 import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import org.joda.time.LocalDate
+import retrofit2.Response
 import javax.inject.Inject
 
 class FetchBetsInteractor @Inject constructor(
@@ -28,17 +28,20 @@ class FetchBetsInteractor @Inject constructor(
         Log.e(TAG, "getBets")
         cache.clear()
 
-        val ncaaf = getNcaaf()
-        val nfl = getNfl()
-        val ncaab = getNcaaB()
         val zipper = BiFunction<List<DailyBet>, List<DailyBet>, List<DailyBet>> { first, second ->
             Log.e(TAG, "zipping")
             first + second
         }
 
-        return ncaaf
-            .zipWith(nfl, zipper)
-            .zipWith(ncaab, zipper)
+        return getNcaaf()
+            .zipWith(getNfl(), zipper)
+            .zipWith(getNcaaB(), zipper)
+            .zipWith(getEsports(), zipper)
+            .zipWith(getTableTennis(), zipper)
+            .zipWith(getNba(), zipper)
+            .zipWith(getNbaPreseason(), zipper)
+            .zipWith(getUfc(), zipper)
+            .zipWith(getBoxing(), zipper)
             .map(::transformData)
             .flatMap {
                 persistData(it)
@@ -46,52 +49,29 @@ class FetchBetsInteractor @Inject constructor(
             }
     }
 
-    private fun getNcaaf(): Maybe<List<DailyBet>> {
-        return service.getNcaaFootballLines()
-            .flatMapMaybe { response ->
+    private fun getNcaaf() = service.getNcaaFootballLines().getData(Category.NCAAF)
+    private fun getNfl() = service.getNflLines().getData(Category.NFL)
+    private fun getNcaaB() = service.getNcaaBasketball().getData(Category.NCAAB)
+    private fun getEsports() = service.getEsports().getData(Category.ESPORTS)
+    private fun getTableTennis() = service.getTableTennis().getData(Category.TABLE_TENNIS)
+    private fun getNba() = service.getNba().getData(Category.NBA)
+    private fun getNbaPreseason() = service.getNbaPreseason().getData(Category.NBA_PRESEASON)
+    private fun getUfc() = service.getUfc().getData(Category.UFC)
+    private fun getBoxing() = service.getBoxing().getData(Category.BOXING)
+
+    fun Single<Response<String>>.getData(category: Category): Maybe<List<DailyBet>> {
+        return this
+            .flatMapMaybe { response  ->
                 response.body()
-                    ?.let { parseAndFilterResponse(Category.NCAAF, it) }
+                    ?.let { parseAndFilterResponse(category, it) }
                     ?.let { Maybe.just(it) }
                     .switchIfNull { Maybe.just(emptyList()) }
             }
-            .doOnComplete { Log.e(TAG, "NCAAF doOnComplete") }
-            .doOnSuccess { Log.e(TAG, "NCAAF doOnSuccess") }
+            .onErrorResumeNext (Maybe.just(emptyList()))
             .doOnError {
                 Log.e(TAG, "${it.message}")
             }
     }
-
-    private fun getNfl(): Maybe<List<DailyBet>> {
-        return service.getNflLines()
-            .flatMapMaybe { response ->
-                response.body()
-                    ?.let { parseAndFilterResponse(Category.NFL, it) }
-                    ?.let { Maybe.just(it) }
-                    .switchIfNull { Maybe.just(emptyList()) }
-            }
-            .doOnComplete { Log.e(TAG, "NFL doOnComplete") }
-            .doOnSuccess { Log.e(TAG, "NFL doOnSuccess") }
-            .doOnError {
-                Log.e(TAG, "${it.message}")
-            }
-    }
-
-    private fun getNcaaB(): Maybe<List<DailyBet>> {
-        return service.getNcaaBasketball()
-            .flatMapMaybe { response ->
-                response.body()
-                    ?.let { parseAndFilterResponse(Category.NCAAB, it) }
-                    ?.let { Maybe.just(it) }
-                    .switchIfNull { Maybe.just(emptyList()) }
-            }
-            .doOnComplete { Log.e(TAG, "getNcaaB doOnComplete") }
-            .doOnSuccess { Log.e(TAG, "getNcaaB doOnSuccess") }
-            .doOnError {
-                Log.e(TAG, "${it.message}")
-            }
-    }
-
-
     private fun parseAndFilterResponse(category: Category, response: String): List<DailyBet> {
         var result = parser.parse(category, response)
 
@@ -106,7 +86,6 @@ class FetchBetsInteractor @Inject constructor(
         //remove all the days that has no bets
         return result.filter { it.bets.isNotEmpty() }
     }
-
 
     private fun transformData(bets: List<DailyBet>): Map<LocalDate, List<DailyBet>> {
         Log.e(TAG, "transformData")

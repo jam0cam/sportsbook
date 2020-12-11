@@ -19,9 +19,9 @@ class BetsViewModel @Inject constructor(
             .map { BetsListItem.BetItem(it.category, it.name, it.odds) }
             .toMutableList()
 
-        insertHeader(tempBets, Category.NCAAF)
-        insertHeader(tempBets, Category.NFL)
-        insertHeader(tempBets, Category.NCAAB)
+        Category.values().forEach {
+            insertHeader(tempBets, it)
+        }
 
         bets.postValue(tempBets)
     }

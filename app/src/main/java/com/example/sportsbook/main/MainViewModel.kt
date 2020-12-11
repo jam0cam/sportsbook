@@ -33,15 +33,14 @@ class MainViewModel @Inject constructor(
     }
 
     private fun formatResults(betsMap: Map<LocalDate, List<DailyBet>>): MainUiModel {
-        val dates =  betsMap.keys.sorted()
-        var startDate = LocalDate.now()
-        val dateList = mutableListOf<LocalDate>(startDate)
+        return MainUiModel(betsMap.keys.sorted().filter { it < LocalDate.now().plusDays(2) })
+    }
 
-        while (startDate < dates.lastOrNull() ?: startDate ) {
-            startDate = startDate.plusDays(1)
-            dateList.add(startDate)
-        }
+    private fun getLastDate(dates: List<LocalDate>) : LocalDate{
+        var date = dates.lastOrNull() ?: LocalDate.now()
+        if (date > LocalDate.now().plusDays(2))
+            date = LocalDate.now().plusDays(2)
 
-        return MainUiModel(dateList.toList())
+        return date
     }
 }
