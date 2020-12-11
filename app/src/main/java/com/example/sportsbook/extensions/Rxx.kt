@@ -38,3 +38,8 @@ fun Completable.withSchedulers(schedulers: MySchedulers): Completable {
 fun Disposable.addTo(compositeDisposable: CompositeDisposable) {
     compositeDisposable.add(this)
 }
+
+inline fun <T> List<T>?.toMaybe(): Maybe<List<T>> {
+    return if (this.isNullOrEmpty()) Maybe.empty()
+    else Maybe.just(this)
+}

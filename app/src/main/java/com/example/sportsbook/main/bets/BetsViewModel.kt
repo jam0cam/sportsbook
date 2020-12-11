@@ -19,12 +19,18 @@ class BetsViewModel @Inject constructor(
             .map { BetsListItem.BetItem(it.category, it.name, it.odds) }
             .toMutableList()
 
-        val idx =  tempBets.indexOfFirst { it is BetsListItem.BetItem && it.category == Category.NCAAF }
-        if (idx >= 0) {
-            tempBets.add(idx, BetsListItem.Header(Category.NCAAF.value))
-        }
+        insertHeader(tempBets, Category.NCAAF)
+        insertHeader(tempBets, Category.NFL)
+        insertHeader(tempBets, Category.NCAAB)
 
         bets.postValue(tempBets)
+    }
+
+    private fun insertHeader(bets: MutableList<BetsListItem>, category: Category) {
+        val idx =  bets.indexOfFirst { it is BetsListItem.BetItem && it.category == category }
+        if (idx >= 0) {
+            bets.add(idx, BetsListItem.Header(category.value))
+        }
     }
 
 }
