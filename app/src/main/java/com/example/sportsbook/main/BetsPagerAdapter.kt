@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.sportsbook.main.bets.BetsFragment
 import org.joda.time.LocalDate
 
 class BetsPagerAdapter (

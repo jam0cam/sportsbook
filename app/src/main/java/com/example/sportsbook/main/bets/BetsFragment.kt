@@ -1,25 +1,25 @@
-package com.example.sportsbook.main
+package com.example.sportsbook.main.bets
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.Contacts.SettingsColumns.KEY
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sportsbook.MyApplication
+import com.example.sportsbook.dagger.ViewModelFactory
 import com.example.sportsbook.databinding.FragmentBetsBinding
 import com.example.sportsbook.extensions.applyBundle
 import com.example.sportsbook.extensions.showIfOrGone
-import com.example.sportsbook.interactors.GetBetsFromCacheInteractor
 import org.joda.time.LocalDate
 import javax.inject.Inject
 
 class BetsFragment : Fragment() {
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel: BetsViewModel by viewModels { viewModelFactory }
 
-    @Inject lateinit var getBetsFromCacheInteractor: GetBetsFromCacheInteractor
     var _binding: FragmentBetsBinding? = null
     private val binding get() = _binding!!
 
@@ -46,9 +46,14 @@ class BetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val date = requireArguments().getSerializable(DATE) as LocalDate
-        val bets = getBetsFromCacheInteractor.getBets(date)
-        Log.e(TAG, "date:$date, bets:$bets")
+        viewModel.init(requireArguments().getSerializable(DATE) as LocalDate)
+
+        with(viewModel) {
+            bets.observe(viewLifecycleOwner, ::bind)
+        }
+    }
+
+    private fun bind(bets: List<BetsListItem>) {
         binding.recycler.apply {
             layoutManager = LinearLayoutManager(
                 context,

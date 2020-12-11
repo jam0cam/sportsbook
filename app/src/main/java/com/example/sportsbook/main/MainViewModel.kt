@@ -14,9 +14,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val urlInteractor: FetchBetsInteractor,
     private val schedulers: MySchedulers,
-) : ViewModel() {
+) : BaseViewModel() {
 
-    private val compositeDisposable = CompositeDisposable()
     val bets = MutableLiveData<MainUiModel>()
     val state = MutableLiveData<MainUiState>()
 

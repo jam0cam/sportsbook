@@ -1,6 +1,8 @@
 package com.example.sportsbook.extensions
 
 import android.view.View
+import com.example.sportsbook.main.Bet
+import com.example.sportsbook.main.bets.BetsListItem
 
 /**
  * Calls the specified block if the object is null.

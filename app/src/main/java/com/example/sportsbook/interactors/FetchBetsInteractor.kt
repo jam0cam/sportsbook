@@ -3,6 +3,7 @@ package com.example.sportsbook.interactors
 import android.util.Log
 import com.example.sportsbook.ApiService
 import com.example.sportsbook.main.BetParser
+import com.example.sportsbook.main.Category
 import com.example.sportsbook.main.DailyBet
 import com.example.sportsbook.persistence.BetsCache
 import io.reactivex.Maybe
@@ -22,7 +23,7 @@ class FetchBetsInteractor @Inject constructor(
             .flatMapMaybe { response ->
                 Log.e("JIA", "got response")
                 var result = response.body()
-                    ?.let { parser.parse(it) }
+                    ?.let { parser.parse(Category.NCAAF, it) }
 
                 //remove all the bets that are not worth betting
                 result?.forEach {

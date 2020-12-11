@@ -9,7 +9,7 @@ class BetParser @Inject constructor() {
 
     var dateFormatter = DateTimeFormat.forPattern("MMMM dd, yyyy")
 
-    fun parse(payload: String) : List<DailyBet> {
+    fun parse(category: Category, payload: String) : List<DailyBet> {
         var startIdx = 0
 
         var dates = getDates(payload)
@@ -32,7 +32,7 @@ class BetParser @Inject constructor() {
 
                 val newList = mutableListOf<Bet>()
                 newList.addAll(list)
-                dailyBets.add(DailyBet(LocalDate.parse(dates[i], dateFormatter), newList))
+                dailyBets.add(DailyBet(category, LocalDate.parse(dates[i], dateFormatter), newList))
 
             } catch (e: Exception) {
                 //this means we are done iterating through the list
@@ -41,7 +41,7 @@ class BetParser @Inject constructor() {
         }
 
         if (list.isNotEmpty()) {
-            dailyBets.add(DailyBet(LocalDate.parse(dates.last(), dateFormatter), list))
+            dailyBets.add(DailyBet(category, LocalDate.parse(dates.last(), dateFormatter), list))
         }
 
         return dailyBets
