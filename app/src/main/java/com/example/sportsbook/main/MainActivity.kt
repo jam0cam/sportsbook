@@ -47,13 +47,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateState(state: MainUiState) {
-        Log.e("JIA", "updating state : ${state.loading}")
+        Log.d("JIA", "updating state : ${state.loading}")
         if (state.loading) binding.progressBar.show()
         else binding.progressBar.hide()
     }
 
     private fun bindBets(model: MainUiModel) {
-        Log.e("JIA", "binding bets $model")
+        Log.d("JIA", "binding bets $model")
 
         binding.pager.adapter = BetsPagerAdapter(model.dates, supportFragmentManager, lifecycle)
         TabLayoutMediator(binding.tab, binding.pager) { tab, position ->

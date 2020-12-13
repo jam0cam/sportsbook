@@ -27,9 +27,9 @@ class MainViewModel @Inject constructor(
             .doFinally { state.value = MainUiState(false) }
             .map(::formatResults)
             .subscribe(bets::postValue, {
-                Log.e("JIA", "error: ${it.message}, $it")
+                Log.d("JIA", "error: ${it.message}, $it")
             }, {
-                Log.e("JIA", "completed with out anything")
+                Log.d("JIA", "completed with out anything")
             }).addTo(compositeDisposable)
     }
 
