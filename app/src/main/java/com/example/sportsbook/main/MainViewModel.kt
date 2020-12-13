@@ -20,6 +20,7 @@ class MainViewModel @Inject constructor(
     val state = MutableLiveData<MainUiState>()
 
     fun init() {
+        compositeDisposable.clear()
         urlInteractor.getBets()
             .withSchedulers(schedulers)
             .doOnSubscribe { state.value = MainUiState(true) }
@@ -34,13 +35,5 @@ class MainViewModel @Inject constructor(
 
     private fun formatResults(betsMap: Map<LocalDate, List<DailyBet>>): MainUiModel {
         return MainUiModel(betsMap.keys.sorted().filter { it < LocalDate.now().plusDays(2) })
-    }
-
-    private fun getLastDate(dates: List<LocalDate>) : LocalDate{
-        var date = dates.lastOrNull() ?: LocalDate.now()
-        if (date > LocalDate.now().plusDays(2))
-            date = LocalDate.now().plusDays(2)
-
-        return date
     }
 }
