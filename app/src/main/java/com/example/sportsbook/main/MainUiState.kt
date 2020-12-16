@@ -1,3 +1,3 @@
 package com.example.sportsbook.main
 
-class MainUiState (var loading: Boolean)
+class MainUiState (val loading: Boolean)

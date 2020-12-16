@@ -11,6 +11,11 @@ import com.example.sportsbook.MyApplication
 import com.example.sportsbook.R
 import com.example.sportsbook.dagger.ViewModelFactory
 import com.example.sportsbook.databinding.ActivityMainBinding
+import com.example.sportsbook.extensions.gone
+import com.example.sportsbook.extensions.observeEvent
+import com.example.sportsbook.extensions.show
+import com.example.sportsbook.extensions.snack
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
 
@@ -33,7 +38,12 @@ class MainActivity : AppCompatActivity() {
         with (viewModel) {
             state.observe(this@MainActivity, ::updateState)
             bets.observe(this@MainActivity, ::bindBets)
+            errorMsg.observeEvent(this@MainActivity, ::showError)
         }
+    }
+
+    private fun showError(msg: String) {
+        binding.root.snack(msg)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,11 +65,23 @@ class MainActivity : AppCompatActivity() {
     private fun bindBets(model: MainUiModel) {
         Log.d("JIA", "binding bets $model")
 
-        binding.pager.adapter = BetsPagerAdapter(model.dates, supportFragmentManager, lifecycle)
-        TabLayoutMediator(binding.tab, binding.pager) { tab, position ->
-            tab.text = model.dates[position].toString()
-        }.attach()
-
+        if (model.dates.isEmpty()) {
+            with(binding) {
+                emptyView.show()
+                tab.gone()
+                pager.gone()
+            }
+        } else {
+            binding.pager.adapter = BetsPagerAdapter(model.dates, supportFragmentManager, lifecycle)
+            TabLayoutMediator(binding.tab, binding.pager) { tab, position ->
+                tab.text = model.dates[position].toString()
+            }.attach()
+            with(binding) {
+                emptyView.gone()
+                tab.show()
+                pager.show()
+            }
+        }
     }
 
 }
