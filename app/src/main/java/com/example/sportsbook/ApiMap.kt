@@ -27,6 +27,7 @@ class ApiMap @Inject constructor(
         UFC to service.getUfc().getData(UFC),
         BOXING to service.getBoxing().getData(BOXING),
         TENNIS to service.getTennis().getData(TENNIS),
+        SOCCER to service.getSoccer().getData(SOCCER),
     )
 
     /**

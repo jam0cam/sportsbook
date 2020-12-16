@@ -35,4 +35,7 @@ interface ApiService {
 
     @GET("/sbk/sportsbook4/tennis-betting/all-tennis-game-lines.sbk")
     fun getTennis(): Single<Response<String>>
+
+    @GET("/sbk/sportsbook4/soccer-betting/today's-games-all-today's-games.sbk")
+    fun getSoccer(): Single<Response<String>>
 }

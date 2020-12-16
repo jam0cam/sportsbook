@@ -39,7 +39,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun formatResults(betsMap: Map<LocalDate, List<DailyBet>>): MainUiModel {
-        if (1==1) throw RuntimeException("hello world")
         return MainUiModel(betsMap.keys.sorted().filter { it < LocalDate.now().plusDays(2) })
     }
 }

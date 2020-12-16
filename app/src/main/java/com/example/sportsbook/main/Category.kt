@@ -13,4 +13,5 @@ enum class Category(val value: String) {
     UFC("UFC"),
     BOXING("Boxing"),
     TENNIS("Tennis"),
+    SOCCER("Soccer"),
 }
