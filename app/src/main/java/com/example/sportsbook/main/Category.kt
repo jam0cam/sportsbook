@@ -1,7 +1,5 @@
 package com.example.sportsbook.main
 
-import com.example.sportsbook.ApiService
-
 enum class Category(val value: String) {
     NCAAF("NCAAF"),
     NFL("NFL"),

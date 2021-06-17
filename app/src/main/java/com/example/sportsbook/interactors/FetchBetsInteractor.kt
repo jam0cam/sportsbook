@@ -1,23 +1,20 @@
 package com.example.sportsbook.interactors
 
 import android.util.Log
-import com.example.sportsbook.ApiMap
-import com.example.sportsbook.ApiService
-import com.example.sportsbook.main.BetParser
-import com.example.sportsbook.main.Category
+import com.example.sportsbook.network.ApiMap
 import com.example.sportsbook.main.DailyBet
+import com.example.sportsbook.network.ApiService
 import com.example.sportsbook.persistence.BetsCache
 import com.example.sportsbook.persistence.ErrorLogger
 import io.reactivex.Maybe
-import io.reactivex.Single
 import io.reactivex.functions.Function
 import org.joda.time.LocalDate
-import java.util.*
 import javax.inject.Inject
 
 class FetchBetsInteractor @Inject constructor(
     private val cache: BetsCache,
     private val apiMap: ApiMap,
+    private val service: ApiService,
     private val errorLogger: ErrorLogger,
 ) {
 
@@ -34,11 +31,15 @@ class FetchBetsInteractor @Inject constructor(
             it.flatMap { it as List<DailyBet> }
         }
 
-        return Maybe.zip(apiMap.map1.values, zipper)
-            .map(::transformData)
-            .flatMap {
-                persistData(it)
-                Maybe.just(it)
+        return service.login()
+            .flatMapMaybe {
+                Log.e("JIA", "Hopefully successful login")
+                Maybe.zip(apiMap.map1.values, zipper)
+                    .map(::transformData)
+                    .flatMap {
+                        persistData(it)
+                        Maybe.just(it)
+                    }
             }
     }
 
