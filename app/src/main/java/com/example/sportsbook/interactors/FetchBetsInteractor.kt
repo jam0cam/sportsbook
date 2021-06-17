@@ -7,6 +7,7 @@ import com.example.sportsbook.main.BetParser
 import com.example.sportsbook.main.Category
 import com.example.sportsbook.main.DailyBet
 import com.example.sportsbook.persistence.BetsCache
+import com.example.sportsbook.persistence.ErrorLogger
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.functions.Function
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 class FetchBetsInteractor @Inject constructor(
     private val cache: BetsCache,
-    private val apiMap: ApiMap
+    private val apiMap: ApiMap,
+    private val errorLogger: ErrorLogger,
 ) {
 
     companion object {
@@ -26,6 +28,7 @@ class FetchBetsInteractor @Inject constructor(
     fun getBets(): Maybe<Map<LocalDate, List<DailyBet>>> {
         Log.d(TAG, "getBets")
         cache.clear()
+        errorLogger.clearLogs()
 
         val zipper = Function<Array<Any>, List<DailyBet>> {
             it.flatMap { it as List<DailyBet> }

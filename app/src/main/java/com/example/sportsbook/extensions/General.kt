@@ -1,6 +1,8 @@
 package com.example.sportsbook.extensions
 
 import android.view.View
+import android.widget.TextView
+import com.example.sportsbook.R
 import com.example.sportsbook.main.Bet
 import com.example.sportsbook.main.bets.BetsListItem
 import com.google.android.material.snackbar.Snackbar
@@ -47,5 +49,6 @@ fun View.show() {
  */
 inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG) {
     val snack = Snackbar.make(this, message, length)
+    snack.view.findViewById<TextView>(R.id.snackbar_text).maxLines = 20
     snack.show()
 }
