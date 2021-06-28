@@ -31,6 +31,7 @@ class ApiMap @Inject constructor(
         UFC to service.getUfc().getData(UFC).subscribeOn(Schedulers.io()),
         BOXING to service.getBoxing().getData(BOXING).subscribeOn(Schedulers.io()),
         TENNIS to service.getTennis().getData(TENNIS).subscribeOn(Schedulers.io()),
+        WIMBLEDON to service.getWimbledon().getData(WIMBLEDON).subscribeOn(Schedulers.io()),
         SOCCER to service.getSoccer().getData(SOCCER).subscribeOn(Schedulers.io()),
     )
 
