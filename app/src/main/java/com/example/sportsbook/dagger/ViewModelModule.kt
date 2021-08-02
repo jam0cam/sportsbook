@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.sportsbook.main.bets.BetsViewModel
 import com.example.sportsbook.main.MainViewModel
+import com.example.sportsbook.sample.SampleViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -24,6 +25,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(BetsViewModel::class)
     internal abstract fun betsViewModel(viewModel: BetsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SampleViewModel::class)
+    internal abstract fun sampleViewModel(viewModel: SampleViewModel): ViewModel
 
     //Add more ViewModels here
 }

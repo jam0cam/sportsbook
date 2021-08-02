@@ -2,6 +2,7 @@ package com.example.sportsbook.dagger
 
 import com.example.sportsbook.main.bets.BetsFragment
 import com.example.sportsbook.main.MainActivity
+import com.example.sportsbook.sample.SampleActivity
 import dagger.Component
 import javax.inject.Singleton
 
@@ -10,4 +11,5 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(activity: MainActivity)
     fun inject(fragment: BetsFragment)
+    fun inject(sampleActivity: SampleActivity)
 }
