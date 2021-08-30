@@ -12,5 +12,6 @@ enum class Category(val value: String) {
     BOXING("Boxing"),
     TENNIS("Tennis"),
     WIMBLEDON("Wimbledon"),
+    US_OPEN("US Open"),
     SOCCER("Soccer"),
 }

@@ -48,6 +48,9 @@ interface ApiService {
     @GET("/sbk/sportsbook4/tennis-betting/wimbledon-matches.sbk")
     fun getWimbledon(): Single<Response<String>>
 
+    @GET("/sbk/sportsbook4/us-open-betting/game-lines.sbk")
+    fun getUsOpen(): Single<Response<String>>
+
     @GET("/sbk/sportsbook4/soccer-betting/today's-games-all-today's-games.sbk")
     fun getSoccer(): Single<Response<String>>
 }
